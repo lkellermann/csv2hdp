@@ -1,0 +1,3 @@
+[submodule "docker-hive"]
+	path = docker-hive
+	url = /run/media/kellermann/files/git_repo/docker-hive/
