@@ -8,33 +8,44 @@
 
 ## About <a name = "about"></a>
 
-This is actually a scratch of a `shell` application to transport small `csv` files from client to Hadoop. There is too much `#TODO` yet... but I'm commiting now because I don't want to miss what I did because some fault on my computer... :grin: 
+`csv2hdp` is a simple shell script that loads data from a`csv` file into a Hive.
 
 ## Getting Started <a name = "getting_started"></a>
-`#TODO`
+
 
 ### Prerequisites
-
-Access to an Hadoop environment.
-
-
-
-
+To run the shell script properly you will need to install the [Docker Engine](https://docs.docker.com/engine/install/) and [Docker Compose](https://docs.docker.com/compose/install/).
 ### Installing
-You shouldn't install anything in production, just run the command. But since I'll have to create a testing environment, so I'll provide the steps to crete the testing environment.
+After downloading this repository you should start the services from `docker-compose.yml`. Suppose that you're inside the root of this repository and with the docker engine running, you should execute the following commands:
+```shell
+cd docker-engine
+docker-compose up
+```
+
+Your services will be up when you see in your terminal something like this:
+```shell
+hive-metastore_1             | YYYY-MM-DDTHH:MM:SS,XXX INFO [pool-7-thread-2] org.apache.hadoop.hive.metastore.HiveMetaStore - 1: source:X.X.X.X get_all_databases
+hive-metastore_1             | YYYY-MM-DDTHH:MM:SS,XXX INFO [pool-7-thread-2] org.apache.hadoop.hive.metastore.HiveMetaStore - 1: source:X.X.X.X get_all_tables: db=default
+hive-metastore_1             | YYYY-MM-DDTHH:MM:SS,XXX INFO [pool-7-thread-2] org.apache.hadoop.hive.metastore.HiveMetaStore - 1: source:X.X.X.X get_multi_table : db=default tbls=sample
+```
 
 ## Usage <a name = "usage"></a>
 
-We want to transfer a `csv`file from client machine to hadoop environment by running something like the following command:
+To run a test in the provided environment you have to enter into `docker-hive_hive-server_1
+` container by the following command:
 
 ```shell
- ./csv2hdp.sh -f ./sample.csv -d mydb
+docker container exec -it docker-hive_hive-server_1 /bin/bash
+```
+
+And to run the test you should execute
+
+```shell
+ /home/csv2hdp/csv2hdp.sh -f ./sample.csv -d default
 ```
 
 or...
 
 ```shell
- ./csv2hdp.sh --file ./sample.csv --database mydb
+ /home/csv2hdp/csv2hdp.sh --file ./sample.csv --database default
 ```
-
-> `#TODO`: I'll deploy this in the Hadoop environment. So probably the command should be something starting as `csv2hdp.sh` instead of `./csv2hdp.sh`.
