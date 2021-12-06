@@ -11,54 +11,54 @@
 #                                                                              #
 # Copyright (c) 2021 CompanyName                                               #
 ################################################################################
-USAGE_MSG=" 
-\e[36m 
-                                                                                                        dddddddd                   
-                                                      222222222222222   hhhhhhh                         d::::::d                   
-                                                     2:::::::::::::::22 h:::::h                         d::::::d                   
-                                                     2::::::222222:::::2h:::::h                         d::::::d                   
-                                                     2222222     2:::::2h:::::h                         d:::::d                    
-    cccccccccccccccc    ssssssssssvvvvvvv           vvvvvvv      2:::::2 h::::h hhhhh           ddddddddd:::::dppppp   ppppppppp   
-  cc:::::::::::::::c  ss::::::::::sv:::::v         v:::::v       2:::::2 h::::hh:::::hhh      dd::::::::::::::dp::::ppp:::::::::p  
- c:::::::::::::::::css:::::::::::::sv:::::v       v:::::v     2222::::2  h::::::::::::::hh   d::::::::::::::::dp:::::::::::::::::p 
+USAGE_MSG="
+\e[36m
+                                                                                                        dddddddd
+                                                      222222222222222   hhhhhhh                         d::::::d
+                                                     2:::::::::::::::22 h:::::h                         d::::::d
+                                                     2::::::222222:::::2h:::::h                         d::::::d
+                                                     2222222     2:::::2h:::::h                         d:::::d
+    cccccccccccccccc    ssssssssssvvvvvvv           vvvvvvv      2:::::2 h::::h hhhhh           ddddddddd:::::dppppp   ppppppppp
+  cc:::::::::::::::c  ss::::::::::sv:::::v         v:::::v       2:::::2 h::::hh:::::hhh      dd::::::::::::::dp::::ppp:::::::::p
+ c:::::::::::::::::css:::::::::::::sv:::::v       v:::::v     2222::::2  h::::::::::::::hh   d::::::::::::::::dp:::::::::::::::::p
 c:::::::cccccc:::::cs::::::ssss:::::sv:::::v     v:::::v 22222::::::22   h:::::::hhh::::::h d:::::::ddddd:::::dpp::::::ppppp::::::p
 c::::::c     ccccccc s:::::s  ssssss  v:::::v   v:::::v22::::::::222     h::::::h   h::::::hd::::::d    d:::::d p:::::p     p:::::p
 c:::::c                s::::::s        v:::::v v:::::v2:::::22222        h:::::h     h:::::hd:::::d     d:::::d p:::::p     p:::::p
 c:::::c                   s::::::s      v:::::v:::::v2:::::2             h:::::h     h:::::hd:::::d     d:::::d p:::::p     p:::::p
 c::::::c     cccccccssssss   s:::::s     v:::::::::v 2:::::2             h:::::h     h:::::hd:::::d     d:::::d p:::::p    p::::::p
 c:::::::cccccc:::::cs:::::ssss::::::s     v:::::::v  2:::::2       222222h:::::h     h:::::hd::::::ddddd::::::ddp:::::ppppp:::::::p
- c:::::::::::::::::cs::::::::::::::s       v:::::v   2::::::2222222:::::2h:::::h     h:::::h d:::::::::::::::::dp::::::::::::::::p 
-  cc:::::::::::::::c s:::::::::::ss         v:::v    2::::::::::::::::::2h:::::h     h:::::h  d:::::::::ddd::::dp::::::::::::::pp  
-    cccccccccccccccc  sssssssssss            vvv     22222222222222222222hhhhhhh     hhhhhhh   ddddddddd   dddddp::::::pppppppp    
-                                                                                                                p:::::p            
-                                                                                                                p:::::p            
-                                                                                                               p:::::::p           
-                                                                                                               p:::::::p           
-                                                                                                               p:::::::p           
-                                                                                                               ppppppppp           
-\e[39m                                                                                                                                   
+ c:::::::::::::::::cs::::::::::::::s       v:::::v   2::::::2222222:::::2h:::::h     h:::::h d:::::::::::::::::dp::::::::::::::::p
+  cc:::::::::::::::c s:::::::::::ss         v:::v    2::::::::::::::::::2h:::::h     h:::::h  d:::::::::ddd::::dp::::::::::::::pp
+    cccccccccccccccc  sssssssssss            vvv     22222222222222222222hhhhhhh     hhhhhhh   ddddddddd   dddddp::::::pppppppp
+                                                                                                                p:::::p
+                                                                                                                p:::::p
+                                                                                                               p:::::::p
+                                                                                                               p:::::::p
+                                                                                                               p:::::::p
+                                                                                                               ppppppppp
+\e[39m
 
 A simple shell script to transfer a local server CSV file into Hive.
 
-Usage $(basename "$0") [OPTIONS] 
+Usage $(basename "$0") [OPTIONS]
     -h, --help          Show this help message and exit.
     -f, --file          Source file path.
     -d, --database      Destiny database.
 
 \e[4mExample\e[24m:
-\e[100m./csv2hdp.sh --file ./sample.csv --database default\e[49m 
+\e[100m./csv2hdp.sh --file ./sample.csv --database default\e[49m
 
 \e[4mExpected behavior\e[24m: the \e[100m sample.csv\e[49m file in this folder will be placed into \e[100m\"default\"\e[49m Hive database.
 
 \e[4mWhat if...?\e[24m
     - My file has the same name as an existing table in provided database?
-        The new file will replace the existing table. 
+        The new file will replace the existing table.
 
 "
 
 drop_table() {
     local statement="drop table if exists $database.$table;" # Generates Hive drop statement.
-    ./run_in_beeline.sh "$statement"                         # Run Hive drop statement.
+    $CSV2HDP/run_in_beeline.sh "$statement"                  # Run Hive drop statement.
 }
 
 create_table() {
@@ -70,7 +70,7 @@ create_table() {
     local create_query="create table if not exists $database.$table($fields) $define_delimiter;"
     local load_data="load data inpath \"$hadoop_file_location\" overwrite into table $database.$table;"
 
-    ./run_in_beeline.sh "$create_query$load_data"
+    "$CSV2HDP"/run_in_beeline.sh "$create_query$load_data"
 }
 
 get_fields() {
