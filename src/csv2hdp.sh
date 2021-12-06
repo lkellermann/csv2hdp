@@ -117,8 +117,8 @@ while test "$#" -gt 0; do
         shift
         if test "$#" -gt 0; then
 
-            file_path="$1"
-            file_name="$(basename "$file_path")"
+            file_name="$1"
+            file_path="$STAGING_CSV"/"$file_name"
             table="$(basename -s .csv "$file_path")"
             echo "Creating query to file $file_path"
         fi
@@ -140,14 +140,14 @@ while test "$#" -gt 0; do
     shift
 done
 
-hive_folder="/opt/hive/staging/$database/$table" # Staging server directory to store headless file.
-hadoop_file_location="$hive_folder/$file_name"   # Hadoop HDFS file path.
-local_file_location="$hadoop_file_location"      # File path to server local headless file.
+hive_staging="$HIVE_HOME/staging/$database/$table" # Staging server directory to store headless file.
+hadoop_file_location="$hive_staging/$file_name"    # Hadoop HDFS file path.
+local_file_location="$hadoop_file_location"        # File path to server local headless file.
 
-mkdir -p "$hive_folder"                     # Create/overwrite file folder.
+mkdir -p "$hive_staging"                    # Create/overwrite file folder.
 sed 1d "$file_path" >"$local_file_location" # Remove header and create/overwrite file to staging headless directory.
 
-hadoop fs -mkdir -p "$hive_folder"                                         # Create directory in HDFS to store the file.
+hadoop fs -mkdir -p "$hive_staging"                                        # Create directory in HDFS to store the file.
 hadoop fs -copyFromLocal -f "$local_file_location" "$hadoop_file_location" # Copy headless file to HDFS.
 hdfs dfs -chmod -R 777 "$hadoop_file_location"                             # Give permissions to Hive user to modify the headless file.
 
