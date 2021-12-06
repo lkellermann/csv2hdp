@@ -1,4 +1,0 @@
-[submodule "docker-hive"]
-path = docker-hive
-url = git@github.com:lkellermann/docker-hive.git
-branch=main
