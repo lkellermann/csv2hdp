@@ -46,7 +46,7 @@ Usage $(basename "$0") [OPTIONS]
     -d, --database      Destiny database.
 
 \e[4mExample\e[24m:
-\e[100m./csv2hdp.sh --file ./sample.csv --database default\e[49m
+\e[100m csv2hdp.sh --file sample.csv --database default\e[49m
 
 \e[4mExpected behavior\e[24m: the \e[100m sample.csv\e[49m file in this folder will be placed into \e[100m\"default\"\e[49m Hive database.
 
